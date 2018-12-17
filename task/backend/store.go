@@ -387,7 +387,6 @@ func (StoreValidation) CreateArgs(req CreateTaskRequest) (options.Options, error
 func (StoreValidation) UpdateArgs(req UpdateTaskRequest) (options.Options, error) {
 	var missing []string
 	var o options.Options
-
 	if req.Script == "" && req.Status == "" {
 		missing = append(missing, "script or status")
 	} else {

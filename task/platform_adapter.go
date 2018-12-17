@@ -2,12 +2,11 @@ package task
 
 import (
 	"context"
-	"errors"
-	"time"
-
+	"github.com/influxdata/flux/edit"
 	"github.com/influxdata/platform"
 	"github.com/influxdata/platform/task/backend"
 	"github.com/influxdata/platform/task/options"
+	"time"
 )
 
 type RunController interface {
@@ -102,8 +101,8 @@ func (p pAdapter) CreateTask(ctx context.Context, t *platform.Task) error {
 }
 
 func (p pAdapter) UpdateTask(ctx context.Context, id platform.ID, upd platform.TaskUpdate) (*platform.Task, error) {
-	if upd.Flux == nil && upd.Status == nil {
-		return nil, errors.New("cannot update task without content")
+	if err := upd.Validate(); err != nil {
+		return nil, err
 	}
 
 	req := backend.UpdateTaskRequest{ID: id}

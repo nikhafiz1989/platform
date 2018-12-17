@@ -2,6 +2,7 @@ package platform
 
 import (
 	"context"
+	"errors"
 )
 
 const (
@@ -76,6 +77,22 @@ type TaskService interface {
 type TaskUpdate struct {
 	Flux   *string `json:"flux,omitempty"`
 	Status *string `json:"status,omitempty"`
+	Name   string  `json:"name,omitempty"`
+	Every  int     `json:"every,omitempty"`
+	Cron   string  `json:"cron,omitempty"`
+	Offset int     `json:"offset,omitempty"`
+}
+
+func (t TaskUpdate) Validate() error {
+	switch {
+	case t.Flux != nil && (t.Name != "" && t.Every != 0 && t.Cron != "" && t.Offset != 0):
+		return errors.New("cannot specify both flux and a one of name, every, cron, or offset")
+	case t.Every != 0 && t.Cron != "":
+		return errors.New("cannot specify both every and cron")
+	case t.Flux == nil && t.Status == nil && t.Name == "" && t.Every == 0 && t.Cron == "" && t.Offset == 0:
+		return errors.New("cannot update task without content")
+	}
+	return nil
 }
 
 // TaskFilter represents a set of filters that restrict the returned results
