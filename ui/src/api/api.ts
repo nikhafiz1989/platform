@@ -465,14 +465,6 @@ export interface CellUpdate {
 /**
  * 
  * @export
- * @interface Cells
- */
-export interface Cells extends Array<Cell> {
-}
-
-/**
- * 
- * @export
  * @interface ConstantMacroProperties
  */
 export interface ConstantMacroProperties {
@@ -562,10 +554,10 @@ export interface CreateCell {
 export interface Dashboard {
     /**
      * 
-     * @type {Cells}
+     * @type {Array<Cell>}
      * @memberof Dashboard
      */
-    cells?: Cells;
+    cells?: Array<Cell>;
     /**
      * user-facing description of the dashboard
      * @type {string}

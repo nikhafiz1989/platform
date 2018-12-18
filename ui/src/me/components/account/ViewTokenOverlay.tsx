@@ -38,23 +38,17 @@ const testPerms: TestPermission[] = [
     resource: Buckets,
     id: '2',
     name: 'telegraf',
-    orgID: '1',
-    orgName: 'myorg',
     actions: [Read],
   },
   {
     resource: Tasks, // resource will be Task `task`
     name: 'task1',
-    orgID: '1',
-    orgName: 'myorg',
     actions: [Read],
   },
   {
     resource: Tasks, // resource will be Task `task`
     id: '2',
     name: 'task1',
-    orgID: '2',
-    orgName: 'yourorg',
     actions: [Read],
   },
 ]
