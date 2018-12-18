@@ -2603,7 +2603,7 @@ export interface Task {
      * @type {string}
      * @memberof Task
      */
-    organizationId?: string;
+    organizationID?: string;
     /**
      * 
      * @type {User}
@@ -2650,7 +2650,7 @@ export interface TaskCreateRequest {
      * @type {string}
      * @memberof TaskCreateRequest
      */
-    organizationId: string;
+    organizationID: string;
     /**
      * Starting state of the task. 'inactive' tasks are not run until they are updated to 'active'
      * @type {string}

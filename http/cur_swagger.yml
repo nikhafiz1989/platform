@@ -3811,7 +3811,7 @@ components:
           type: string
     TaskCreateRequest:
       properties:
-        organizationId:
+        organizationID:
           description: The ID of the organization that owns this Task.
           type: string
         status:
@@ -3824,7 +3824,7 @@ components:
         flux:
           description: The Flux script to run for this task.
           type: string
-      required: [organizationId, flux]
+      required: [organizationID, flux]
     TaskUpdateRequest:
       properties:
         status:
@@ -3842,7 +3842,7 @@ components:
         id:
           readOnly: true
           type: string
-        organizationId:
+        organizationID:
           description: The ID of the organization that owns this Task.
           type: string
         name:

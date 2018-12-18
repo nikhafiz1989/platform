@@ -11,17 +11,16 @@ const (
 
 // Task is a task. 🎊
 type Task struct {
-	ID               ID     `json:"id,omitempty"`
-	Organization     ID     `json:"organizationID"`
-	OrganizationName string `json:"organizationName"`
-	Name             string `json:"name"`
-	Status           string `json:"status"`
-	Owner            User   `json:"owner"`
-	Flux             string `json:"flux"`
-	Every            string `json:"every,omitempty"`
-	Cron             string `json:"cron,omitempty"`
-	Offset           string `json:"offset,omitempty"`
-	LatestCompleted  string `json:"latest_completed,omitempty"`
+	ID              ID     `json:"id,omitempty"`
+	Organization    ID     `json:"organizationID"`
+	Name            string `json:"name"`
+	Status          string `json:"status"`
+	Owner           User   `json:"owner"`
+	Flux            string `json:"flux"`
+	Every           string `json:"every,omitempty"`
+	Cron            string `json:"cron,omitempty"`
+	Offset          string `json:"offset,omitempty"`
+	LatestCompleted string `json:"latest_completed,omitempty"`
 }
 
 // Run is a record created when a run of a task is scheduled.
