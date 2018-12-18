@@ -170,15 +170,7 @@ func Generate(
 						User:        "admin",
 						UserID:      MustIDBase16(oneID),
 						Description: "Deftok",
-						Permissions: []platform.Permission{
-							platform.CreateUserPermission,
-							platform.DeleteUserPermission,
-							{
-								Resource: platform.OrganizationResource,
-								Action:   platform.WriteAction,
-							},
-							platform.WriteBucketPermission(MustIDBase16(threeID)),
-						},
+						Permissions: platform.OperPermissions(),
 					},
 				},
 			},

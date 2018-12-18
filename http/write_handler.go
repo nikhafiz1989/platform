@@ -119,8 +119,7 @@ func (h *WriteHandler) handleWrite(w http.ResponseWriter, r *http.Request) {
 			Name:           &req.Bucket,
 		})
 		if err != nil {
-			logger.Info("Failed to find bucket", zap.Stringer("org_id", org.ID), zap.Error(err))
-			EncodeError(ctx, fmt.Errorf("bucket %q not found", req.Bucket), w)
+			EncodeError(ctx, fmt.Errorf("bucket not found: %v", err), w)
 			return
 		}
 
@@ -129,7 +128,8 @@ func (h *WriteHandler) handleWrite(w http.ResponseWriter, r *http.Request) {
 
 	p, err := platform.NewPermissionAtID(bucket.ID, bucket.Name, platform.WriteAction, platform.BucketsResource)
 	if err != nil {
-		EncodeError(ctx, fmt.Errorf("could not create permission", req.Bucket), w)
+		EncodeError(ctx, fmt.Errorf("could not create permission for bucket: %v", err), w)
+		return
 	}
 
 	if !a.Allowed(*p) {

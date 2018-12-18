@@ -92,14 +92,12 @@ type Permission struct {
 	Resource Resource `json:"resource"`
 	ID       *ID      `json:"id,omitempty"`
 	Name     *string  `json:"name,omitempty"`
-	OrgName  *string  `json:"orgName,omitempty"`
-	OrgID    *ID      `json:"orgID,omitempty"`
 }
 
 func (p Permission) String() string {
 	str := fmt.Sprintf("%s:%s", p.Action, p.Resource)
-	if p.Name != nil || *p.Name != "" {
-		str += fmt.Sprintf(":%s", p.Name)
+	if p.Name != nil && *p.Name != "" {
+		str += fmt.Sprintf(":%s", *p.Name)
 	}
 
 	return str
@@ -119,7 +117,7 @@ func (p *Permission) Valid() error {
 		return ErrInvalidPermissionAction
 	}
 
-	if p.ID != nil || (*p.ID).Valid() {
+	if p.ID != nil && !(*p.ID).Valid() {
 		return ErrInvalidID
 	}
 
@@ -143,19 +141,6 @@ func NewPermissionAtID(id ID, name string, a Action, r Resource) (*Permission, e
 		Resource: r,
 		ID:       &id,
 		Name:     &name,
-	}
-
-	return p, p.Valid()
-}
-
-func NewPermissionAtOrgID(id ID, name string, orgID ID, orgName string, a Action, r Resource) (*Permission, error) {
-	p := &Permission{
-		Action:   a,
-		Resource: r,
-		ID:       &id,
-		Name:     &name,
-		OrgID:    &orgID,
-		OrgName:  &orgName,
 	}
 
 	return p, p.Valid()

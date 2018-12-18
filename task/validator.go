@@ -37,12 +37,7 @@ func NewValidator(ts platform.TaskService, bs platform.BucketService) platform.T
 }
 
 func (ts *taskServiceValidator) CreateTask(ctx context.Context, t *platform.Task) error {
-	org, err := ctx.FindOrganizationByID(t.Organization)
-	if err != nil {
-		return err
-	}
-
-	p, err := NewPermissionAtOrgID(Task.ID, Task.Name, org.ID, org.Name, platform.CreateAction, platform.TasksResource)
+	p, err := platform.NewPermissionAtID(t.ID, t.Name, platform.CreateAction, platform.TasksResource)
 	if err != nil {
 		return err
 	}
