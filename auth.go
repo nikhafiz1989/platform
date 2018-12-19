@@ -6,15 +6,13 @@ import (
 
 // Authorization is an authorization. 🎉
 type Authorization struct {
-	ID          ID           `json:"id,omitempty"`
+	ID          ID           `json:"id"`
 	Token       string       `json:"token"`
 	Status      Status       `json:"status"`
 	Description string       `json:"description"`
-	OrgName     string       `json:"orgName,omitempty"`
-	OrgID       ID           `json:"orgID,omitempty"`
-	User        string       `json:"user,omitempty"`
-	UserID      ID           `json:"userID,omitempty"`
-	Permissions []Permission `json:"permissions,omitempty"`
+	OrgID       ID           `json:"orgID"`
+	UserID      ID           `json:"userID"`
+	Permissions []Permission `json:"permissions"`
 }
 
 // Allowed returns true if the authorization is active and request permission

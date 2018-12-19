@@ -81,7 +81,7 @@ func newOnboardingResponse(results *platform.OnboardingResults) *onboardingRespo
 		User:         newUserResponse(results.User),
 		Bucket:       newBucketResponse(results.Bucket),
 		Organization: newOrgResponse(results.Org),
-		Auth:         newAuthResponse(results.Auth),
+		Auth:         newAuthResponse(results.Auth, results.Org, results.User),
 	}
 }
 

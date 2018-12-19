@@ -26,18 +26,6 @@ func (c *Client) initializeAuthorizations(ctx context.Context, tx *bolt.Tx) erro
 	return nil
 }
 
-func (c *Client) setUserOnAuthorization(ctx context.Context, tx *bolt.Tx, a *platform.Authorization) *platform.Error {
-	u, err := c.findUserByID(ctx, tx, a.UserID)
-	if err != nil {
-		return &platform.Error{
-			Code: platform.ENotFound,
-			Err:  err,
-		}
-	}
-	a.User = u.Name
-	return nil
-}
-
 // FindAuthorizationByID retrieves a authorization by id.
 func (c *Client) FindAuthorizationByID(ctx context.Context, id platform.ID) (*platform.Authorization, error) {
 	var a *platform.Authorization
@@ -79,10 +67,6 @@ func (c *Client) findAuthorizationByID(ctx context.Context, tx *bolt.Tx, id plat
 			Code: platform.EInvalid,
 			Err:  err,
 		}
-	}
-
-	if err := c.setUserOnAuthorization(ctx, tx, &a); err != nil {
-		return nil, err
 	}
 
 	return &a, nil
@@ -213,17 +197,6 @@ func (c *Client) findAuthorizations(ctx context.Context, tx *bolt.Tx, f platform
 func (c *Client) CreateAuthorization(ctx context.Context, a *platform.Authorization) error {
 	op := getOp(platform.OpCreateAuthorization)
 	return c.db.Update(func(tx *bolt.Tx) error {
-		if !a.UserID.Valid() {
-			u, err := c.findUserByName(ctx, tx, a.User)
-			if err != nil && platform.ErrorCode(err) != platform.ENotFound {
-				return &platform.Error{
-					Err: err,
-					Op:  op,
-				}
-			}
-			a.UserID = u.ID
-		}
-
 		unique := c.uniqueAuthorizationToken(ctx, tx, a)
 
 		if !unique {
@@ -266,7 +239,6 @@ func (c *Client) PutAuthorization(ctx context.Context, a *platform.Authorization
 }
 
 func encodeAuthorization(a *platform.Authorization) ([]byte, error) {
-	a.User = ""
 	switch a.Status {
 	case platform.Active, platform.Inactive:
 	case "":
@@ -305,7 +277,8 @@ func (c *Client) putAuthorization(ctx context.Context, tx *bolt.Tx, a *platform.
 			Err: err,
 		}
 	}
-	return c.setUserOnAuthorization(ctx, tx, a)
+
+	return nil
 }
 
 func authorizationIndexKey(n string) []byte {
@@ -329,9 +302,6 @@ func (c *Client) forEachAuthorization(ctx context.Context, tx *bolt.Tx, fn func(
 		a := &platform.Authorization{}
 
 		if err := decodeAuthorization(v, a); err != nil {
-			return err
-		}
-		if err := c.setUserOnAuthorization(ctx, tx, a); err != nil {
 			return err
 		}
 		if !fn(a) {

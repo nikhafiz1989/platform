@@ -115,7 +115,6 @@ func CreateAuthorization(
 			args: args{
 				authorization: &platform.Authorization{
 					ID:          MustIDBase16(authOneID),
-					User:        "cooluser",
 					Permissions: allUsersPermission(),
 				},
 			},
@@ -126,7 +125,6 @@ func CreateAuthorization(
 						UserID:      MustIDBase16(userOneID),
 						Token:       "rand",
 						Status:      platform.Active,
-						User:        "cooluser",
 						Permissions: allUsersPermission(),
 					},
 				},
@@ -162,7 +160,6 @@ func CreateAuthorization(
 			},
 			args: args{
 				authorization: &platform.Authorization{
-					User:        "regularuser",
 					ID:          MustIDBase16(authTwoID),
 					Permissions: createUsersPermission(),
 				},
@@ -172,7 +169,6 @@ func CreateAuthorization(
 					{
 						ID:          MustIDBase16(authOneID),
 						UserID:      MustIDBase16(userOneID),
-						User:        "cooluser",
 						Status:      platform.Active,
 						Token:       "supersecret",
 						Permissions: allUsersPermission(),
@@ -180,7 +176,6 @@ func CreateAuthorization(
 					{
 						ID:          MustIDBase16(authTwoID),
 						UserID:      MustIDBase16(userTwoID),
-						User:        "regularuser",
 						Token:       "rand",
 						Status:      platform.Active,
 						Permissions: createUsersPermission(),
@@ -218,7 +213,6 @@ func CreateAuthorization(
 			},
 			args: args{
 				authorization: &platform.Authorization{
-					User:        "regularuser",
 					Permissions: createUsersPermission(),
 				},
 			},
@@ -227,7 +221,6 @@ func CreateAuthorization(
 					{
 						ID:          MustIDBase16(authOneID),
 						UserID:      MustIDBase16(userOneID),
-						User:        "cooluser",
 						Status:      platform.Active,
 						Token:       "supersecret",
 						Permissions: allUsersPermission(),
@@ -235,7 +228,6 @@ func CreateAuthorization(
 					{
 						ID:          MustIDBase16(authTwoID),
 						UserID:      MustIDBase16(userTwoID),
-						User:        "regularuser",
 						Token:       "rand",
 						Status:      platform.Active,
 						Permissions: createUsersPermission(),
@@ -331,7 +323,6 @@ func FindAuthorizationByID(
 				authorization: &platform.Authorization{
 					ID:          MustIDBase16(authTwoID),
 					UserID:      MustIDBase16(userTwoID),
-					User:        "regularuser",
 					Status:      platform.Active,
 					Token:       "rand2",
 					Permissions: createUsersPermission(),
@@ -424,7 +415,6 @@ func FindAuthorizationByToken(
 					ID:          MustIDBase16(authOneID),
 					UserID:      MustIDBase16(userOneID),
 					Status:      platform.Inactive,
-					User:        "cooluser",
 					Token:       "rand1",
 					Permissions: allUsersPermission(),
 				},
@@ -503,7 +493,6 @@ func FindAuthorizations(
 					{
 						ID:          MustIDBase16(authOneID),
 						UserID:      MustIDBase16(userOneID),
-						User:        "cooluser",
 						Token:       "rand1",
 						Status:      platform.Active,
 						Permissions: allUsersPermission(),
@@ -511,7 +500,6 @@ func FindAuthorizations(
 					{
 						ID:          MustIDBase16(authTwoID),
 						UserID:      MustIDBase16(userTwoID),
-						User:        "regularuser",
 						Token:       "rand2",
 						Status:      platform.Active,
 						Permissions: createUsersPermission(),
@@ -562,7 +550,6 @@ func FindAuthorizations(
 					{
 						ID:          MustIDBase16(authOneID),
 						UserID:      MustIDBase16(userOneID),
-						User:        "cooluser",
 						Status:      platform.Active,
 						Token:       "rand1",
 						Permissions: allUsersPermission(),
@@ -570,7 +557,6 @@ func FindAuthorizations(
 					{
 						ID:          MustIDBase16(authThreeID),
 						UserID:      MustIDBase16(userOneID),
-						User:        "cooluser",
 						Status:      platform.Active,
 						Token:       "rand3",
 						Permissions: deleteUsersPermission(),
@@ -626,7 +612,6 @@ func FindAuthorizations(
 					{
 						ID:          MustIDBase16(authTwoID),
 						UserID:      MustIDBase16(userTwoID),
-						User:        "regularuser",
 						Token:       "rand2",
 						Status:      platform.Active,
 						Permissions: createUsersPermission(),
@@ -717,7 +702,6 @@ func DeleteAuthorization(
 					{
 						ID:          MustIDBase16(authTwoID),
 						UserID:      MustIDBase16(userTwoID),
-						User:        "regularuser",
 						Status:      platform.Active,
 						Token:       "rand2",
 						Permissions: createUsersPermission(),
@@ -766,7 +750,6 @@ func DeleteAuthorization(
 					{
 						ID:          MustIDBase16(authOneID),
 						UserID:      MustIDBase16(userOneID),
-						User:        "cooluser",
 						Token:       "rand1",
 						Status:      platform.Active,
 						Permissions: allUsersPermission(),
@@ -774,7 +757,6 @@ func DeleteAuthorization(
 					{
 						ID:          MustIDBase16(authTwoID),
 						UserID:      MustIDBase16(userTwoID),
-						User:        "regularuser",
 						Token:       "rand2",
 						Status:      platform.Active,
 						Permissions: createUsersPermission(),

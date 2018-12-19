@@ -167,7 +167,6 @@ func Generate(
 						ID:          MustIDBase16(fourID),
 						Token:       oneToken,
 						Status:      platform.Active,
-						User:        "admin",
 						UserID:      MustIDBase16(oneID),
 						Description: "Deftok",
 						Permissions: platform.OperPermissions(),

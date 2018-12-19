@@ -93,7 +93,6 @@ func (s *Service) Generate(ctx context.Context, req *platform.OnboardingRequest)
 		return nil, err
 	}
 	auth := &platform.Authorization{
-		User:        u.Name,
 		UserID:      u.ID,
 		Description: onboardingTokenDesc,
 		Permissions: platform.OperPermissions(),

@@ -104,7 +104,6 @@ func authorizationCreateF(cmd *cobra.Command, args []string) error {
 	}
 
 	authorization := &platform.Authorization{
-		User:        authorizationCreateFlags.user,
 		Permissions: permissions,
 	}
 
@@ -136,7 +135,6 @@ func authorizationCreateF(cmd *cobra.Command, args []string) error {
 		"ID":          authorization.ID.String(),
 		"Token":       authorization.Token,
 		"Status":      authorization.Status,
-		"User":        authorization.User,
 		"UserID":      authorization.UserID.String(),
 		"Permissions": ps,
 	})
@@ -239,7 +237,6 @@ func authorizationFindF(cmd *cobra.Command, args []string) error {
 			"ID":          a.ID,
 			"Token":       a.Token,
 			"Status":      a.Status,
-			"User":        a.User,
 			"UserID":      a.UserID.String(),
 			"Permissions": permissions,
 		})
@@ -309,7 +306,6 @@ func authorizationDeleteF(cmd *cobra.Command, args []string) error {
 	w.Write(map[string]interface{}{
 		"ID":          a.ID.String(),
 		"Token":       a.Token,
-		"User":        a.User,
 		"UserID":      a.UserID.String(),
 		"Permissions": ps,
 		"Deleted":     true,
@@ -380,7 +376,6 @@ func authorizationActiveF(cmd *cobra.Command, args []string) error {
 		"ID":          a.ID.String(),
 		"Token":       a.Token,
 		"Status":      a.Status,
-		"User":        a.User,
 		"UserID":      a.UserID.String(),
 		"Permissions": ps,
 	})
@@ -450,7 +445,6 @@ func authorizationInactiveF(cmd *cobra.Command, args []string) error {
 		"ID":          a.ID.String(),
 		"Token":       a.Token,
 		"Status":      a.Status,
-		"User":        a.User,
 		"UserID":      a.UserID.String(),
 		"Permissions": ps,
 	})

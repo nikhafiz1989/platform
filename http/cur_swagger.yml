@@ -3548,6 +3548,7 @@ components:
             - dashboards
             - sources
     Authorization:
+      required: [permissions, orgID]
       properties:
         links:
           type: object
@@ -3568,9 +3569,13 @@ components:
           readOnly: true
           type: string
         user:
+          readOnly: true
           type: string
+          description: name of user that created the authorization
         userID:
+          readOnly: true
           type: string
+          description: id of user that created the authorization
         status:
           description: if inactive the token is inactive and requests using the token will be rejected.
           default: active
@@ -3582,11 +3587,13 @@ components:
           readOnly: true
           type: string
         description:
+          nullable: true
           description: user defined description of the authorization
           type: string
         orgID:
           type: string
-        orgName:
+        org:
+          readOnly: true
           type: string
         permissions:
           type: array
