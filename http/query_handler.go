@@ -297,7 +297,7 @@ func (s *FluxService) Query(ctx context.Context, w io.Writer, r *query.ProxyRequ
 	}
 	defer resp.Body.Close()
 
-	if err := CheckError(resp); err != nil {
+	if err := CheckError(resp, true); err != nil {
 		return 0, err
 	}
 	return io.Copy(w, resp.Body)
