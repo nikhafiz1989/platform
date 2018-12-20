@@ -3,6 +3,10 @@ package testing
 import (
 	"testing"
 
+	"fmt"
+
+	"encoding/json"
+	"github.com/google/go-cmp/cmp"
 	"github.com/influxdata/platform"
 )
 
@@ -39,4 +43,27 @@ func MustIDBase16(s string) platform.ID {
 		panic(err)
 	}
 	return *id
+}
+
+// CompareJSON tests two JSON strings.
+func CompareJSON(got, want, name, header string) error {
+	var errorFn = func() error {
+		return fmt.Errorf("%q.%s \ngot\n%v\n\nwant\n%v", name, header, got, want)
+	}
+
+	var gotO interface{}
+	if gotErr := json.Unmarshal([]byte(got), &gotO); gotErr != nil {
+		return errorFn()
+	}
+
+	var wantO interface{}
+	if wantErr := json.Unmarshal([]byte(want), &wantO); wantErr != nil {
+		return errorFn()
+	}
+
+	if eq := cmp.Equal(gotO, wantO); !eq {
+		return errorFn()
+	}
+
+	return nil
 }
