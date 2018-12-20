@@ -6,7 +6,6 @@ import (
 
 	"github.com/influxdata/flux/ast"
 	"github.com/influxdata/flux/functions"
-	fluxInputs "github.com/influxdata/flux/functions/inputs"
 	"github.com/influxdata/flux/functions/transformations"
 	"github.com/influxdata/flux/plan"
 	"github.com/influxdata/flux/plan/plantest"
@@ -21,6 +20,11 @@ import (
 )
 
 func TestFrom_NewQuery(t *testing.T) {
+	bid, err := platform.IDFromString( "aaaabbbbccccdddd")
+	if err != nil {
+		panic(err)
+	}
+
 	t.Skip()
 	tests := []querytest.NewQueryTestCase{
 		{
@@ -55,8 +59,8 @@ func TestFrom_NewQuery(t *testing.T) {
 				Operations: []*flux.Operation{
 					{
 						ID: "from0",
-						Spec: &fluxInputs.FromOpSpec{
-							BucketID: "aaaabbbbccccdddd",
+						Spec: &inputs.FromOpSpec{
+							BucketID: *bid,
 						},
 					},
 				},
@@ -69,7 +73,7 @@ func TestFrom_NewQuery(t *testing.T) {
 				Operations: []*flux.Operation{
 					{
 						ID: "from0",
-						Spec: &fluxInputs.FromOpSpec{
+						Spec: &inputs.FromOpSpec{
 							Bucket: "mybucket",
 						},
 					},
@@ -117,7 +121,7 @@ func TestFromOperation_Marshaling(t *testing.T) {
 	data := []byte(`{"id":"from","kind":"from","spec":{"bucket":"mybucket"}}`)
 	op := &flux.Operation{
 		ID: "from",
-		Spec: &fluxInputs.FromOpSpec{
+		Spec: &inputs.FromOpSpec{
 			Bucket: "mybucket",
 		},
 	}

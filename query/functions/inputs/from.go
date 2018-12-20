@@ -7,7 +7,6 @@ import (
 	"github.com/influxdata/flux/ast"
 	"github.com/influxdata/flux/execute"
 	"github.com/influxdata/flux/functions"
-	"github.com/influxdata/flux/functions/inputs"
 	"github.com/influxdata/flux/functions/transformations"
 	"github.com/influxdata/flux/plan"
 	"github.com/influxdata/flux/semantic"
@@ -17,6 +16,13 @@ import (
 	"github.com/influxdata/platform/query/functions/inputs/storage"
 	"github.com/pkg/errors"
 )
+
+const FromKind = "from"
+
+type FromOpSpec struct {
+	Bucket   string      `json:"bucket,omitempty"`
+	BucketID platform.ID `json:"bucketID,omitempty"`
+}
 
 func init() {
 	fromSignature := semantic.FunctionPolySignature{
@@ -28,10 +34,9 @@ func init() {
 		Return:   flux.TableObjectType,
 	}
 
-	// FromOpSpec is registered in Flux. Do not register it here.
-	execute.RegisterSource(physicalFromKind, createFromSource)
-	flux.RegisterFunction(inputs.FromKind, createFromOpSpec, fromSignature)
-	plan.RegisterProcedureSpec(inputs.FromKind, newFromProcedure, inputs.FromKind)
+	flux.RegisterOpSpec(FromKind, newFromOp)
+	flux.RegisterFunction(FromKind, createFromOpSpec, fromSignature)
+	plan.RegisterProcedureSpec(FromKind, newFromProcedure, FromKind)
 	plan.RegisterPhysicalRules(
 		FromConversionRule{},
 		MergeFromRangeRule{},
@@ -39,18 +44,10 @@ func init() {
 		FromDistinctRule{},
 		MergeFromGroupRule{},
 	)
+	execute.RegisterSource(physicalFromKind, createFromSource)
 }
 
-type bucketAwareFromOpSpec struct {
-	Bucket   string
-	BucketID platform.ID
-}
-
-func (*bucketAwareFromOpSpec) Kind() flux.OperationKind {
-	return inputs.FromKind
-}
-
-func (s *bucketAwareFromOpSpec) BucketsAccessed() (readBuckets, writeBuckets []platform.BucketFilter) {
+func (s *FromOpSpec) BucketsAccessed() (readBuckets, writeBuckets []platform.BucketFilter) {
 	bf := platform.BucketFilter{}
 	if s.Bucket != "" {
 		bf.Name = &s.Bucket
@@ -67,7 +64,7 @@ func (s *bucketAwareFromOpSpec) BucketsAccessed() (readBuckets, writeBuckets []p
 }
 
 func createFromOpSpec(args flux.Arguments, a *flux.Administration) (flux.OperationSpec, error) {
-	spec := new(bucketAwareFromOpSpec)
+	spec := new(FromOpSpec)
 
 	if bucket, ok, err := args.GetString("bucket"); err != nil {
 		return nil, err
@@ -93,13 +90,21 @@ func createFromOpSpec(args flux.Arguments, a *flux.Administration) (flux.Operati
 	return spec, nil
 }
 
+func newFromOp() flux.OperationSpec {
+	return new(FromOpSpec)
+}
+
+func (s *FromOpSpec) Kind() flux.OperationKind {
+	return FromKind
+}
+
 type FromProcedureSpec struct {
 	Bucket   string
-	BucketID string
+	BucketID platform.ID
 }
 
 func newFromProcedure(qs flux.OperationSpec, pa plan.Administration) (plan.ProcedureSpec, error) {
-	spec, ok := qs.(*inputs.FromOpSpec)
+	spec, ok := qs.(*FromOpSpec)
 	if !ok {
 		return nil, fmt.Errorf("invalid spec type %T", qs)
 	}
@@ -111,7 +116,7 @@ func newFromProcedure(qs flux.OperationSpec, pa plan.Administration) (plan.Proce
 }
 
 func (s *FromProcedureSpec) Kind() plan.ProcedureKind {
-	return inputs.FromKind
+	return FromKind
 }
 
 func (s *FromProcedureSpec) Copy() plan.ProcedureSpec {
@@ -129,7 +134,7 @@ func (s FromProcedureSpec) PostPhysicalValidate(id plan.NodeID) error {
 	if len(s.Bucket) > 0 {
 		bucket = s.Bucket
 	} else {
-		bucket = s.BucketID
+		bucket = s.BucketID.String()
 	}
 	return fmt.Errorf(`%s: results from "%s" must be bounded`, id, bucket)
 }
@@ -222,7 +227,7 @@ func (s PhysicalFromProcedureSpec) PostPhysicalValidate(id plan.NodeID) error {
 		if len(s.Bucket) > 0 {
 			bucket = s.Bucket
 		} else {
-			bucket = s.BucketID
+			bucket = s.BucketID.String()
 		}
 		return fmt.Errorf(`%s: results from "%s" must be bounded`, id, bucket)
 	}
@@ -240,7 +245,7 @@ func (FromConversionRule) Name() string {
 }
 
 func (FromConversionRule) Pattern() plan.Pattern {
-	return plan.Pat(inputs.FromKind)
+	return plan.Pat(FromKind)
 }
 
 func (FromConversionRule) Rewrite(pn plan.PlanNode) (plan.PlanNode, bool, error) {
@@ -634,27 +639,20 @@ func createFromSource(prSpec plan.ProcedureSpec, dsid execute.DatasetID, a execu
 	}
 	currentTime := w.Start + execute.Time(w.Period)
 
-	deps := a.Dependencies()[inputs.FromKind].(storage.Dependencies)
+	deps := a.Dependencies()[FromKind].(storage.Dependencies)
 	req := query.RequestFromContext(a.Context())
 	if req == nil {
 		return nil, errors.New("missing request on context")
 	}
 	orgID := req.OrganizationID
 
-	var bucketID platform.ID
-	// Determine bucketID
-	switch {
-	case spec.Bucket != "":
+	bucketID := spec.BucketID
+	if !bucketID.Valid() {
 		b, ok := deps.BucketLookup.Lookup(orgID, spec.Bucket)
 		if !ok {
 			return nil, fmt.Errorf("could not find bucket %q", spec.Bucket)
 		}
 		bucketID = b
-	case len(spec.BucketID) != 0:
-		err := bucketID.DecodeFromString(spec.BucketID)
-		if err != nil {
-			return nil, err
-		}
 	}
 
 	return storage.NewSource(
@@ -683,6 +681,6 @@ func InjectFromDependencies(depsMap execute.Dependencies, deps storage.Dependenc
 	if err := deps.Validate(); err != nil {
 		return err
 	}
-	depsMap[inputs.FromKind] = deps
+	depsMap[FromKind] = deps
 	return nil
 }
