@@ -1,10 +1,11 @@
 import {Authorization} from 'src/api'
 import {authorizationsAPI} from 'src/utils/api'
 import {AxiosResponse} from 'axios'
+import {authorization} from './__mocks__/mockData'
 
 export const getAuthorizations = async (): Promise<Authorization[]> => {
-  const {data} = await authorizationsAPI.authorizationsGet()
-  return data.authorizations
+  // const {data} = await authorizationsAPI.authorizationsGet()
+  return [authorization]
 }
 
 export const deleteAuthorization = async (
