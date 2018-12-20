@@ -5,6 +5,11 @@
 
 @import 'src/style/modules';
 
+$index-list--xs-height: 22px;
+$index-list--sm-height: 32px;
+$index-list--md-height: 52px;
+$index-list--lg-height: 66px;
+
 .index-list {
   border: 0;
   border-collapse: collapse;
@@ -15,19 +20,14 @@
   @include no-user-select();
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  padding: 0 13px;
-  font-size: 14px;
   font-weight: 600;
   color: $g11-sidewalk;
   white-space: nowrap;
-  height: 52px;
 }
 
 .index-list--cell {
   height: calc(100% - #{$ix-border});
-  padding: $ix-marg-a + $ix-marg-b;
   background-color: $g3-castle;
-  font-size: 14px;
   font-weight: 500;
   color: $g13-mist;
   display: flex;
@@ -193,4 +193,38 @@
 .index-list--sort-descending .index-list--sort-arrow {
   opacity: 1;
   transform: rotate(00deg);
+}
+
+/*
+  Size Modifiers
+  ------------------------------------------------------------------------------
+*/
+@mixin indexListSizeModifier($height, $fontSize, $padding) {
+  .index-list--header-cell,
+  .index-list--row-cell {
+    height: $height;
+  }
+  .index-list--header-cell,
+  .index-list--cell {
+    font-size: $fontSize;
+  }
+  .index-list--header-cell {
+    padding: 0 $padding;
+  }
+  .index-list--cell {
+    padding: $padding;
+  }
+}
+
+.index-list--xs {
+  @include indexListSizeModifier($index-list--xs-height, $form-xs-font, $form-xs-padding);
+}
+.index-list--sm {
+  @include indexListSizeModifier($index-list--sm-height, $form-sm-font, $form-sm-padding);
+}
+.index-list--md {
+  @include indexListSizeModifier($index-list--md-height, $form-md-font, $form-md-padding);
+}
+.index-list--lg {
+  @include indexListSizeModifier($index-list--lg-height, $form-lg-font, $form-lg-padding);
 }

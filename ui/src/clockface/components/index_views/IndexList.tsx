@@ -11,15 +11,23 @@ import Cell from 'src/clockface/components/index_views/IndexListRowCell'
 // Decorators
 import {ErrorHandling} from 'src/shared/decorators/errors'
 
+// Types
+import {ComponentSize} from 'src/clockface/types'
+
 // Styles
 import './IndexList.scss'
 
 interface Props {
   children: JSX.Element[] | JSX.Element
+  size?: ComponentSize
 }
 
 @ErrorHandling
 class IndexList extends Component<Props> {
+  public static defaultProps: Partial<Props> = {
+    size: ComponentSize.Medium,
+  }
+
   public static Body = Body
   public static Header = Header
   public static HeaderCell = HeaderCell
@@ -29,7 +37,13 @@ class IndexList extends Component<Props> {
   public render() {
     const {children} = this.props
 
-    return <table className="index-list">{children}</table>
+    return <table className={this.className}>{children}</table>
+  }
+
+  private get className(): string {
+    const {size} = this.props
+
+    return `index-list index-list--${size}`
   }
 }
 
