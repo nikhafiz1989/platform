@@ -9,7 +9,7 @@ export const authorization: Authorization = {
     user: '/api/v2/users/030444b10a710000',
   },
   org: 'Cooooool Orgggg bruhhh',
-  description: 'I belive in free will',
+  description: 'I believe in free will',
   orgID: '0',
   id: '030444b11fb10000',
   token:
