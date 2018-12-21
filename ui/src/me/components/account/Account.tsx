@@ -26,26 +26,28 @@ export default class Account extends PureComponent<WithRouterProps> {
           <Page.Header.Right />
         </Page.Header>
         <Page.Contents fullWidth={false} scrollable={true}>
-          <ProfilePage
-            name="Account"
-            activeTabUrl={params.tab}
-            parentUrl="/account"
-          >
-            <ProfilePageSection
-              title="Settings"
-              id={Tabs.Settings}
-              url={Tabs.Settings}
+          <div className="col-xs-12">
+            <ProfilePage
+              name="Account"
+              activeTabUrl={params.tab}
+              parentUrl="/account"
             >
-              <Settings />
-            </ProfilePageSection>
-            <ProfilePageSection
-              title="Tokens"
-              id={Tabs.Tokens}
-              url={Tabs.Tokens}
-            >
-              <Tokens />
-            </ProfilePageSection>
-          </ProfilePage>
+              <ProfilePageSection
+                title="Settings"
+                id={Tabs.Settings}
+                url={Tabs.Settings}
+              >
+                <Settings />
+              </ProfilePageSection>
+              <ProfilePageSection
+                title="Tokens"
+                id={Tabs.Tokens}
+                url={Tabs.Tokens}
+              >
+                <Tokens />
+              </ProfilePageSection>
+            </ProfilePage>
+          </div>
         </Page.Contents>
       </Page>
     )
