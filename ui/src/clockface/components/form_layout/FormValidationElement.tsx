@@ -70,9 +70,15 @@ class FormValidationElement extends Component<Props, State> {
   private get label(): JSX.Element {
     const {label, required} = this.props
 
+    let title = label
+
+    if (required) {
+      title = 'This field is required'
+    }
+
     if (label) {
       return (
-        <FormLabel label={label} required={required}>
+        <FormLabel label={label} required={required} title={title}>
           {this.labelChild}
         </FormLabel>
       )

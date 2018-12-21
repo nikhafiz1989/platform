@@ -7,15 +7,16 @@ interface Props {
   label: string
   children?: JSX.Element
   required?: boolean
+  title?: string
 }
 
 @ErrorHandling
 class FormLabel extends Component<Props> {
   public render() {
-    const {label, children} = this.props
+    const {label, children, title} = this.props
 
     return (
-      <label className="form--label">
+      <label className="form--label" title={title} alt={label}>
         <span>
           {label}
           {this.requiredIndicator}
