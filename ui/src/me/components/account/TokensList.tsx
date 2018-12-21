@@ -47,6 +47,8 @@ export default class TokenList extends PureComponent<Props, State> {
         <IndexList.Header>
           <IndexList.HeaderCell columnName="Description" />
           <IndexList.HeaderCell columnName="Status" />
+          <IndexList.HeaderCell columnName="Organization" />
+          <IndexList.HeaderCell columnName="" />
         </IndexList.Header>
         <IndexList.Body emptyState={this.emptyState} columnCount={2}>
           {auths.map(a => {
