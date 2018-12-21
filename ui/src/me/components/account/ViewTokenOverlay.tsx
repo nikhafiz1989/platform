@@ -30,21 +30,25 @@ export default class TokenRow extends PureComponent<Props> {
   public render() {
     const {auth, onDismiss} = this.props
 
+    if (!auth) {
+      return
+    }
+
     return (
-      <OverlayContainer maxWidth={660}>
+      <OverlayContainer maxWidth={460}>
         <OverlayHeading title={auth.description} onDismiss={onDismiss} />
         <OverlayBody>
           <IndexList size={ComponentSize.Small}>
             <IndexList.Header>
-              <IndexList.HeaderCell columnName="Resource" width="50%" />
+              <IndexList.HeaderCell columnName="Resource" width="70%" />
               <IndexList.HeaderCell
                 columnName="Read"
-                width="25%"
+                width="15%"
                 alignment={Alignment.Center}
               />
               <IndexList.HeaderCell
                 columnName="Write"
-                width="25%"
+                width="15%"
                 alignment={Alignment.Center}
               />
             </IndexList.Header>
@@ -76,36 +80,7 @@ export default class TokenRow extends PureComponent<Props> {
       resource = permission.name
     }
 
-    let resourceIcon: string
-
-    switch (permission.resource) {
-      case ResourceEnum.Buckets:
-        resourceIcon = IconFont.Trash
-        break
-      case ResourceEnum.Users:
-        resourceIcon = IconFont.User
-        break
-      case ResourceEnum.Orgs:
-        resourceIcon = IconFont.UsersDuo
-        break
-      case ResourceEnum.Sources:
-        resourceIcon = IconFont.Disks
-        break
-      case ResourceEnum.Dashboards:
-        resourceIcon = IconFont.DashJ
-        break
-      default:
-        resourceIcon = IconFont.Star
-    }
-
-    return (
-      <IndexList.Cell>
-        <ComponentSpacer stackChildren={Stack.Columns} align={Alignment.Left}>
-          <span className={`icon ${resourceIcon}`} />
-          <span>{resource}</span>
-        </ComponentSpacer>
-      </IndexList.Cell>
-    )
+    return <IndexList.Cell>{resource}</IndexList.Cell>
   }
 
   private readCell = (permission: Permission): JSX.Element => {
