@@ -13,13 +13,11 @@ import {
   Greys,
   EmptyState,
   ComponentSize,
-  Stack,
-  ComponentSpacer,
 } from 'src/clockface'
 
 // Types
 import {Authorization, Permission} from 'src/api'
-const {ActionEnum, ResourceEnum} = Permission
+const {ActionEnum} = Permission
 
 interface Props {
   auth: Authorization
@@ -40,17 +38,17 @@ export default class TokenRow extends PureComponent<Props> {
         <OverlayBody>
           <IndexList size={ComponentSize.Small}>
             <IndexList.Header>
-              <IndexList.HeaderCell columnName="Resource" width="70%" />
               <IndexList.HeaderCell
                 columnName="Read"
-                width="15%"
+                width="12%"
                 alignment={Alignment.Center}
               />
               <IndexList.HeaderCell
                 columnName="Write"
-                width="15%"
+                width="12%"
                 alignment={Alignment.Center}
               />
+              <IndexList.HeaderCell columnName="Resource" width="76%" />
             </IndexList.Header>
             <IndexList.Body emptyState={this.emptyList} columnCount={3}>
               {this.rows}
@@ -66,9 +64,9 @@ export default class TokenRow extends PureComponent<Props> {
 
     return permissions.map(p => (
       <IndexList.Row>
-        {this.resourceCell(p)}
         {this.readCell(p)}
         {this.writeCell(p)}
+        {this.resourceCell(p)}
       </IndexList.Row>
     ))
   }
