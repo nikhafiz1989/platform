@@ -4502,6 +4502,9 @@ components:
         user:
           type: string
           description: name of user.
+        description:
+          type: string
+          description: a description of the token.
         permissions:
           type: array
           items:
@@ -4910,31 +4913,58 @@ components:
           format: uri
     Routes:
       properties:
-        sources:
-          type: string
-          format: uri
-        dashboards:
-          type: string
-          format: uri
-        query:
-          type: string
-          format: uri
-        write:
-          type: string
-          format: uri
-        orgs:
-          type: string
-          format: uri
         authorizations:
           type: string
           format: uri
         buckets:
           type: string
           format: uri
-        users:
+        dashboards:
           type: string
           format: uri
-        tasks:
+        external:
+          type: object
+          properties:
+            statusFeed:
+              type: string
+              format: uri
+        macros:
+          type: string
+          format: uri
+        me:
+          type: string
+          format: uri
+        orgs:
+          type: string
+          format: uri
+        query:
+          type: object
+          properties:
+            self:
+              type: string
+              format: uri
+            ast:
+              type: string
+              format: uri
+            analyze:
+              type: string
+              format: uri
+            spec:
+              type: string
+              format: uri
+            suggestions:
+              type: string
+              format: uri
+        setup:
+          type: string
+          format: uri
+        signin:
+          type: string
+          format: uri
+        signout:
+          type: string
+          format: uri
+        sources:
           type: string
           format: uri
         system:
@@ -4949,14 +4979,21 @@ components:
             health:
               type: string
               format: uri
-        external:
-          type: object
-          properties:
-            statusFeed:
-              type: string
-              format: uri
-        flux:
-          $ref: "#/components/schemas/FluxLinks"
+        tasks:
+          type: string
+          format: uri
+        telegrafs:
+          type: string
+          format: uri
+        users:
+          type: string
+          format: uri
+        write:
+          type: string
+          format: uri
+        views:
+          type: string
+          format: uri
     Error:
       properties:
         code:
@@ -6507,7 +6544,7 @@ components:
           type: string
           enum:
             - pass
-            - fail
+            - failo
     Labels:
       type: array
       items:
@@ -6517,8 +6554,7 @@ components:
       properties:
         name:
           type: string
-        color:
-          type: string
-          description: A six-character hex color.
-          pattern: '^([A-Fa-f0-9]{6})$'
-          example: 'ffb3b3'
+        properties:
+          type: object
+          description: Key/Value pairs associated with this label. Keys can be removed by sending an update with an empty value.
+          example: {"color": "ffb3b3", "description": "this is a description"}
